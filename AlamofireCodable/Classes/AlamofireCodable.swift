@@ -49,7 +49,7 @@ extension DataRequest {
     }
     
     /// Codable Object Serializer
-    public static func ObjectSerializer<T: Codable>(_ keyPath: String?, mapToObject object: T? = nil) -> DataResponseSerializer<T> {
+    public static func ObjectSerializer<T: Codable>(_ keyPath: String?) -> DataResponseSerializer<T> {
         return DataResponseSerializer { request, response, data, error in
             if let error = checkResponseForError(request: request, response: response, data: data, error: error){
                 return .failure(error)
@@ -75,12 +75,11 @@ extension DataRequest {
     /// - Parameters:
     ///   - queue:              The queue on which the completion handler is dispatched.
     ///   - keyPath:            The key path where object mapping should be performed
-    ///   - object:             An object to perform the mapping on to
-    ///   - completionHandler:  A closure to be executed once the request has finished and the data has been decode by JSONDecoder.
+    ///   - completionHandler:  A closure to be executed once the request has finished and the data has been decoded by JSONDecoder.
     /// - Returns:              The request.
     @discardableResult
-    public func responseObject<T: Codable>(queue: DispatchQueue? = nil, keyPath: String? = nil, mapToObject object: T? = nil, completionHandler: @escaping (DataResponse<T>) -> Void) -> Self {
-        return response(queue: queue, responseSerializer: DataRequest.ObjectSerializer(keyPath, mapToObject: object), completionHandler: completionHandler)
+    public func responseObject<T: Codable>(queue: DispatchQueue? = nil, keyPath: String? = nil,  completionHandler: @escaping (DataResponse<T>) -> Void) -> Self {
+        return response(queue: queue, responseSerializer: DataRequest.ObjectSerializer(keyPath), completionHandler: completionHandler)
     }
     
     /// Codable Array Serializer
@@ -111,7 +110,7 @@ extension DataRequest {
     /// - Parameters:
     ///   - queue:              The queue on which the completion handler is dispatched.
     ///   - keyPath:            The key path where object mapping should be performed
-    ///   - completionHandler:  A closure to be executed once the request has finished and the data has been decode by JSONDecoder.
+    ///   - completionHandler:  A closure to be executed once the request has finished and the data has been decoded by JSONDecoder.
     /// - Returns:              The request.
     @discardableResult
     public func responseArray<T: Codable>(queue: DispatchQueue? = nil, keyPath: String? = nil, completionHandler: @escaping (DataResponse<[T]>) -> Void) -> Self {
