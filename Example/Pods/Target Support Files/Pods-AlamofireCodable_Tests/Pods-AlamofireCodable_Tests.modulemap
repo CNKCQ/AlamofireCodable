@@ -1,0 +1,6 @@
+framework module Pods_AlamofireCodable_Tests {
+  umbrella header "Pods-AlamofireCodable_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
