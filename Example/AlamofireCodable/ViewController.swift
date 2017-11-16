@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func objectRequest(_ sender: Any) {
-        let form = WeatherForm()
+        let form = WeatherForm<Weather>()
         Alamofire.request(
                 form.url,
                 method: HTTPMethod.get,
@@ -37,7 +37,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func arrayRequest(_ sender: Any) {
-        let form = WeatherForm()
+        let form = WeatherForm<Forecast>()
         Alamofire.request(
                 form.url,
                 method: HTTPMethod.get,
@@ -59,22 +59,43 @@ class ViewController: UIViewController {
     }
     
     @IBAction func nestedRequest(_ sender: Any) {
-        let form = WeatherForm()
+        let form = WeatherForm<RootModel>()
+        requestFrom(form) { (response) in
+            debugPrint("🌹-- 来了", response)
+        }
+//        Alamofire.request(
+//            form.url,
+//            method: HTTPMethod.get,
+//            parameters: form.parameters(),
+//            encoding: form.encoding(),
+//            headers: form.headers()
+//            )
+//            .responseObject(completionHandler: { (response: DataResponse<RootModel>) in
+//                switch response.result {
+//                case .success(let root):
+//                    debugPrint("🌹", root)
+//                case .failure(let error):
+//                    debugPrint("🌹", error.localizedDescription)
+//                }
+//            })
+    }
+    
+    func requestFrom<T: Codable>(_ form: WeatherForm<T>, success: @escaping (_ result: T) -> Void )  {
         Alamofire.request(
-            form.url,
-            method: HTTPMethod.get,
-            parameters: form.parameters(),
-            encoding: form.encoding(),
-            headers: form.headers()
-            )
-            .responseObject(completionHandler: { (response: DataResponse<RootModel>) in
-                switch response.result {
-                case .success(let root):
-                    debugPrint("🌹", root)
-                case .failure(let error):
-                    debugPrint("🌹", error.localizedDescription)
-                }
-            })
+                form.url,
+                method: HTTPMethod.get,
+                parameters: form.parameters(),
+                encoding: form.encoding(),
+                headers: form.headers()
+            ).responseObject(completionHandler: { (response: DataResponse<T>) in
+            switch response.result {
+            case .success(let root):
+//                debugPrint("🌹", root)
+                success(root)
+            case .failure(let error):
+                debugPrint("🌹", error.localizedDescription)
+            }
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -107,7 +128,7 @@ struct Forecast: Codable {
     var temperature: Int64
 }
 
-struct WeatherForm {
+struct WeatherForm<T: Codable> {
     
     var city = "shanghai"
     

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "summary": "A short description of AlamofireCodable.",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/wangchengqvan@gmail.com/AlamofireCodable",
+  "homepage": "https://github.com/cnkcq/AlamofireCodable",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,7 +12,7 @@
     "wangchengqvan@gmail.com": "chengquan.wang@ele.me"
   },
   "source": {
-    "git": "https://github.com/wangchengqvan@gmail.com/AlamofireCodable.git",
+    "git": "https://github.com/cnkcq/AlamofireCodable.git",
     "tag": "0.1.0"
   },
   "platforms": {
