@@ -1,3 +1,4 @@
+
 //
 //  ViewController.swift
 //  AlamofireCodable
@@ -11,10 +12,19 @@ import AlamofireCodable
 import Alamofire
 
 class ViewController: UIViewController {
+    
+    var manager: Alamofire.SessionManager = .default
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+//        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+//        configuration.protocolClasses!.insert(MyURLProtocol.self, atIndex: 0)
+//        manager = Manager(configuration: configuration)
+        let configuration = URLSessionConfiguration.default
+//        URLProtocol.registerClass(AURLProtocol.self)
+        configuration.protocolClasses?.insert(AURLProtocol.self, at: 0)
+        manager = Alamofire.SessionManager(configuration: configuration)
     }
     
     @IBAction func objectRequest(_ sender: Any) {
@@ -33,8 +43,29 @@ class ViewController: UIViewController {
                 case .failure(let error):
                     debugPrint("🌹", error.localizedDescription)
                 }
-            })
-    }
+            }).response { (response: DefaultDataResponse) in
+                let jsonString = String(data: response.data!, encoding: .utf8)
+                print("🌹-- \(jsonString!) ---🌹")
+                
+            }.responseData { (response: DataResponse<Data>) in
+                print("🌹-- \(response.result.value?.description) ---🌹")
+        }
+//        Alamofire.request(
+//            form.url,
+//            method: HTTPMethod.get,
+//            parameters: form.parameters(),
+//            encoding: form.encoding(),
+//            headers: form.headers()
+//            )
+//            .responseObject(keyPath: "data",completionHandler: { (response: DataResponse<Weather>) in
+//                switch response.result {
+//                case .success(let object):
+//                    debugPrint("🌹", object.location)
+//                case .failure(let error):
+//                    debugPrint("🌹", error.localizedDescription)
+//                }
+//            })
+}
     
     @IBAction func arrayRequest(_ sender: Any) {
         let form = WeatherForm<Forecast>()
@@ -59,10 +90,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func nestedRequest(_ sender: Any) {
-        let form = WeatherForm<RootModel>()
-        requestFrom(form) { (response) in
-            debugPrint("🌹-- 来了", response)
-        }
+//        let form = WeatherForm<RootModel>()
+//        requestFrom(form) { (response) in
+//            debugPrint("🌹-- 来了", response)
+//        }
 //        Alamofire.request(
 //            form.url,
 //            method: HTTPMethod.get,
@@ -80,23 +111,41 @@ class ViewController: UIViewController {
 //            })
     }
     
-    func requestFrom<T: Codable>(_ form: WeatherForm<T>, success: @escaping (_ result: T) -> Void )  {
-        Alamofire.request(
-                form.url,
-                method: HTTPMethod.get,
-                parameters: form.parameters(),
-                encoding: form.encoding(),
-                headers: form.headers()
-            ).responseObject(completionHandler: { (response: DataResponse<T>) in
-            switch response.result {
-            case .success(let root):
-//                debugPrint("🌹", root)
-                success(root)
-            case .failure(let error):
-                debugPrint("🌹", error.localizedDescription)
-            }
-        })
-    }
+//    func requestFrom<T: Codable>(_ form: WeatherForm<T>, success: @escaping (_ result: T) -> Void )  {
+//        Alamofire.request(
+//                form.url,
+//                method: HTTPMethod.get,
+//                parameters: form.parameters(),
+//                encoding: form.encoding(),
+//                headers: form.headers()
+//            )
+//            .responseObject(completionHandler: { (response: DataResponse<T>) in
+//            switch response.result {
+//            case .success(let root):
+////                debugPrint("🌹", root)
+//                success(root)
+//            case .failure(let error):
+//                debugPrint("🌹", error.localizedDescription)
+//            }
+//        })
+//    }
+    
+//    func request<T: Codable>(
+//        _ form: WeatherForm<T>,
+//        success: ((T) -> Void)? = nil ,
+//        failure: ((_ error: Error) -> Void)? = nil
+//        ) {
+//        Alamofire.request(
+//            form.url,
+//            method: form.method,
+//            parameters: form.parameters(),
+//            encoding: form.encoding(),
+//            headers: form.headers()
+//            )
+//            .responseObject { (response: DataResponse<T>) in
+//
+//        }
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -148,6 +197,9 @@ struct WeatherForm<T: Codable> {
     public func headers() -> [String: String] {
         return ["accessToken": "xxx"]
     }
+    
 }
+
+
 
 
