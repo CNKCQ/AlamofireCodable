@@ -1,3 +1,8 @@
+[![CI Status](https://img.shields.io/travis/CNKCQ/DigitalKeyboard.svg?style=flat)](https://travis-ci.org/CNKCQ/AlamofireCodable)
+[![Version](https://img.shields.io/cocoapods/v/AlamofireCodable.svg?style=flat)](http://cocoadocs.org/docsets/AlamofireCodable)
+[![Platform](https://img.shields.io/cocoapods/p/AlamofireCodable.svg?style=flat)](http://cocoadocs.org/docsets/AlamofireCodable)
+![](https://img.shields.io/github/stars/CNKCQ/AlamofireCodable.svg?style=social&label=Star)
+
 [AlamofireCodable](https://github.com/CNKCQ/AlamofireCodable): An extension to [Alamofire](https://github.com/Alamofire/Alamofire) which automatically converts JSON response data into swift objects using Codable. 
 This project is heavily inspired by the popular [AlamofireObjectMapper](https://github.com/tristanhimmelman/AlamofireObjectMapper). 
 
